@@ -1,6 +1,6 @@
 /*
 Cyclistic Case Study: Quarterly Data Exploration, 2021_Q1
-Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
+Windows Functions, Aggregate Functions, Converting Data Types
 */
 
  -- Select columns from Q1 data to preview
