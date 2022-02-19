@@ -1,19 +1,23 @@
 /*
-Cyclistic Case Study: Data Exploration, 2021_Q1
+Cyclistic Case Study: Quarterly Data Exploration, 2021_Q1
 Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
 */
 
- -- Select Q1 data 
+ -- Select columns from Q1 data to preview
 
 SELECT  
         ride_id,
+        started_at,
+        ended_at,
         ride_length,
         day_of_week, 
+        start_station_name,
+        end_station_name,
         member_casual
 FROM 
         `cyclistic-cs-341119.biketrips.2021_Q1`
 ORDER BY 
-        ride_length DESC
+        ride_id DESC
 
 
   -- Total Trips: Members vs Casual 
@@ -23,8 +27,8 @@ SELECT
         TotalTrips,
         TotalMemberTrips,
         TotalCasualTrips,
-        (TotalMemberTrips/TotalTrips)*100 AS MemberPercentage,
-        (TotalCasualTrips/TotalTrips)*100 AS CasualPercentage,
+        ROUND(TotalMemberTrips/TotalTrips,2)*100 AS MemberPercentage,
+        ROUND(TotalCasualTrips/TotalTrips,2)*100 AS CasualPercentage
 FROM 
         (
         SELECT
@@ -35,13 +39,9 @@ FROM
                 `cyclistic-cs-341119.biketrips.2021_Q1`
         )
 
--- 2021_Q1 Total Trips = 278,118
--- 2021_Q1 Total Member Trips = 183,954 (66.1% of total)
--- 2021_Q1 Total Casual Trips =  94,164 (33.9% of total)
-
 
  -- Avergage Ride Lengths: Members vs Casual  
- -- Looking at overall, member and casual average ride lengths. 
+ -- Looking at overall, member and casual average ride lengths
 
 SELECT
         (
@@ -67,8 +67,6 @@ SELECT
                 member_casual = 'casual'
         ) AS AvgRideLength_Casual
 
- -- We can see that casual riders average 23 more minutes per trip. 
- -- Could this be do to outliers?
 
  -- Max Ride Lengths: Members vs Casual  
  -- Looking at max ride lengths to check for outliers
@@ -85,16 +83,21 @@ ORDER BY
 LIMIT 
         2
 
- -- As we suspected, the casual riders average ride_length
- -- was sigificantly impacted by at least one outlier but 
- -- probably more. The longest trip duration for casual 
- -- riders was 528 hours, or 22 days. The longest for annual
- -- was about 26 hours. 
+SELECT 
+        member_casual,
+        ride_length
+FROM 
+        `cyclistic-cs-341119.biketrips.2021_Q1`
+WHERE 
+        member_casual = 'casual'
+ORDER BY 
+        ride_length DESC
+LIMIT 
+        100
 
 
  -- Median Ride Lengths: Members vs Casual 
- -- Looking at median because of outliers influence on AVG.
- -- This will be more accurate for analysis.
+ -- Looking at median because of outliers influence on AVG
 
 SELECT
         DISTINCT median_ride_length,
@@ -112,10 +115,8 @@ FROM
 ORDER BY 
         median_ride_length DESC LIMIT 2
 
- -- Now we see a much closer number, with 18 minutes for casual
- -- riders and 10 minutes for annual members.
 
- -- Number of rides per day for member and casual
+ -- Rides per day: member and casual
  -- Looking at which days have the highest number of rides
 
 SELECT
@@ -134,8 +135,6 @@ WHERE
         rn = 1
 ORDER BY
         member_casual DESC LIMIT 2
- 
- -- Unsurprisingly, Saturday is the most popular day for trips
 
 
  -- Looking at average ride length per day of week
@@ -156,9 +155,6 @@ GROUP BY
         day_of_week
 ORDER BY
         average_ride_length DESC LIMIT 7
-
- -- Unsurprisingly, Saturday also has the longest average
- -- ride length
  
 
  -- How about the median ride length per day of week?
@@ -178,8 +174,6 @@ FROM
         )
 ORDER BY 
         median_ride_length DESC LIMIT 7
- 
- -- Sunday just edges out Saturday for the longest median ride length
 
  
  -- Looking at AVG ride length per day of week for casual and annual
@@ -204,7 +198,7 @@ ORDER BY
         average_ride_length DESC LIMIT 14
 
 
- -- Looking at median ride lengths per day because of outliers influencing AVG
+ -- Looking at median ride lengths per day for annual members  
 
 SELECT
         DISTINCT median_ride_length,
@@ -225,7 +219,10 @@ FROM
         )
 ORDER BY 
         median_ride_length DESC LIMIT 7
-##
+
+
+ -- Looking at median ride lengths per day for casual riders  
+ 
 SELECT
         DISTINCT median_ride_length,
         member_casual,
@@ -246,11 +243,8 @@ FROM
 ORDER BY 
         median_ride_length DESC LIMIT 7
 
- -- Very interesting! The median ride length for casual riders 
- -- on the top four days (SUN, SAT, MON, TUE) is nearly double 
- -- the amount for annual members on those same days. 
 
-
+ -- Overall trips per day
  -- Looking at total number of trips per day_of_week
 
 SELECT  
@@ -264,7 +258,24 @@ ORDER BY
         TotalTrips DESC LIMIT 7
 
 
- -- Looking at total number of member trips per day_of_week
+ -- Overall, member, casual
+ -- Looking at total number of trips per day 
+
+SELECT  
+        day_of_week,
+        COUNT(DISTINCT ride_id) AS TotalTrips,
+        SUM(CASE WHEN member_casual = 'member' THEN 1 ELSE 0 END) AS MemberTrips,
+        SUM(CASE WHEN member_casual = 'casual' THEN 1 ELSE 0 END) AS CasualTrips
+FROM 
+        `cyclistic-cs-341119.biketrips.2021_Q1`
+GROUP BY 
+        1
+ORDER BY 
+        TotalTrips DESC LIMIT 7
+
+
+ -- Member only
+ -- Looking at total number of trips per day
 
 SELECT  
         day_of_week,
@@ -279,7 +290,8 @@ ORDER BY
         TotalTrips DESC LIMIT 7
 
 
- -- Looking at total number of casual trips per day_of_week
+ -- Casual only
+ -- Looking at total number of trips per day
 
 SELECT  
         day_of_week,
@@ -291,4 +303,44 @@ WHERE
 GROUP BY 
         day_of_week
 ORDER BY 
-        TotalTrips DESC LIMIT 7
+        TotalTrips DESC LIMIT 7  
+
+
+ -- Start stations: member vs casual
+ -- Looking at start station counts
+
+SELECT 
+        DISTINCT start_station_name,
+        SUM(
+            CASE WHEN ride_id = ride_id AND start_station_name = start_station_name THEN 1 ELSE 0 END
+            ) AS total,
+        SUM(
+            CASE WHEN member_casual = 'member' AND start_station_name = start_station_name THEN 1 ELSE 0 END
+            ) AS member,
+        SUM(
+            CASE WHEN member_casual = 'casual' AND start_station_name = start_station_name THEN 1 ELSE 0 END
+            ) AS casual
+FROM 
+        `cyclistic-cs-341119.biketrips.2021_Q1`
+GROUP BY 
+        start_station_name
+ORDER BY 
+        total DESC
+        -- member DESC
+        -- casual DESC
+
+
+ -- Location data
+ -- Defining MIN and MAX values for latitude and longitude
+
+SELECT  
+        MAX(start_lat) AS start_lat_max,
+        MIN(start_lat) AS start_lat_min,
+        MAX(start_lng) AS start_lng_max,
+        MIN(start_lng) AS start_lng_min,
+        MAX(end_lat) AS end_lat_max,
+        MAX(end_lat) AS end_lat_min,
+        MAX(end_lng) AS end_lng_max,
+        MIN(end_lng) AS end_lng_min
+FROM
+        `cyclistic-cs-341119.biketrips.2021_Q1`
