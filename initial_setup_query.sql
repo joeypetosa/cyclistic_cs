@@ -22,14 +22,14 @@ SELECT
         rideable_type, 
         started_at, 
         ended_at, 
-	      CAST(ride_length AS STRING) AS ride_length, 
-	      day_of_week, 
+	CAST(ride_length AS STRING) AS ride_length, 
+	day_of_week, 
         start_station_name, 
         start_station_id, 
-	      end_station_name, 
+	end_station_name, 
         end_station_id, 
         start_lat, 
-	      start_lng, 
+	start_lng, 
         end_lat, 
         end_lng, 
         member_casual
@@ -41,11 +41,11 @@ FROM
  -- Repeat for 2021_02 and 2022_01 tables
 
 SELECT  
-        *
+	*
 FROM 
-   	    `cyclistic-cs-341119.biketrips.2021_02_biketrips`
+	`cyclistic-cs-341119.biketrips.2021_02_biketrips`
 ORDER BY
-        ride_length DESC 
+	ride_length DESC 
 
 
  -- Update data type for ride_length pt. II
@@ -56,14 +56,14 @@ SELECT
         rideable_type, 
         started_at, 
         ended_at, 
-	      CAST(ride_length AS INTERVAL) AS ride_length, 
-	      day_of_week, 
+	CAST(ride_length AS INTERVAL) AS ride_length, 
+	day_of_week, 
         start_station_name, 
         start_station_id, 
-	      end_station_name, 
+	end_station_name, 
         end_station_id, 
         start_lat, 
-	      start_lng, 
+	start_lng, 
         end_lat, 
         end_lng, 
         member_casual
@@ -77,7 +77,7 @@ FROM
 SELECT  
         *
 FROM 
-   	    `cyclistic-cs-341119.biketrips.2021_02_biketrips`
+	`cyclistic-cs-341119.biketrips.2021_02_biketrips`
 ORDER BY
         ride_length DESC 
 
@@ -86,7 +86,7 @@ ORDER BY
  -- Repeat for all 12 tables
 
 SELECT 
-	      COUNT (DISTINCT ride_id)
+	COUNT (DISTINCT ride_id)
 FROM 
         `cyclistic-cs-341119.biketrips.2021_02_biketrips`
 
@@ -106,15 +106,15 @@ SELECT
         rideable_type, 
         started_at, 
         ended_at, 
-	      ride_length, 
+	ride_length, 
         day_of_week, 
         start_station_name, 
-	      start_station_id, 
+	start_station_id, 
         end_station_name, 
-	      end_station_id, 
+	end_station_id, 
         start_lat, 
         start_lng, 
-	      end_lat, 
+	end_lat, 
         end_lng, 
         member_casual
 FROM 
@@ -125,15 +125,15 @@ SELECT
         rideable_type, 
         started_at, 
         ended_at, 
-	      ride_length, 
+	ride_length, 
         day_of_week, 
         start_station_name, 
-	      start_station_id, 
+	start_station_id, 
         end_station_name, 
-	      end_station_id, 
+	end_station_id, 
         start_lat, 
         start_lng, 
-	      end_lat, 
+	end_lat, 
         end_lng, 
         member_casual
 FROM 
@@ -144,15 +144,15 @@ SELECT
         rideable_type, 
         started_at, 
         ended_at, 
-	      ride_length, 
+	ride_length, 
         day_of_week, 
         start_station_name, 
-	      start_station_id, 
+	start_station_id, 
         end_station_name, 
-	      end_station_id, 
+	end_station_id, 
         start_lat, 
         start_lng, 
-	      end_lat, 
+	end_lat, 
         end_lng, 
         member_casual
 FROM 
@@ -172,12 +172,12 @@ SELECT
         start_station_name, 
         start_station_id, 
         end_station_name, 
-	      end_station_id, 
+	end_station_id, 
         start_lat, 
         start_lng, 
         end_lat, 
         end_lng, 
-	      member_casual
+	member_casual
 FROM 
         `cyclistic-cs-341119.biketrips.2021_Q1`
 
@@ -186,7 +186,7 @@ FROM
  -- Update 'day_of_week' values with CASE WHEN
 
 UPDATE 
-	      `cyclistic-cs-341119.biketrips.2021_Q1`
+	`cyclistic-cs-341119.biketrips.2021_Q1`
 SET  
         day_of_week = 
             CASE
