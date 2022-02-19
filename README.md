@@ -1,2 +1,2 @@
 # Cyclistic Case Study
-A repository of my sql files for the Cyclistic case study.
+A repository of sql files for the Cyclistic case study.
