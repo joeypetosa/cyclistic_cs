@@ -198,7 +198,7 @@ ORDER BY
         average_ride_length DESC LIMIT 14
 
 
- -- Looking at median ride lengths per day for annual members  
+ -- Looking at median ride lengths per day
 
 SELECT
         DISTINCT median_ride_length,
@@ -216,29 +216,7 @@ FROM
                 `cyclistic-cs-341119.biketrips.2021_Q1`
         WHERE
                 member_casual = 'member'
-        )
-ORDER BY 
-        median_ride_length DESC LIMIT 7
-
-
- -- Looking at median ride lengths per day for casual riders  
- 
-SELECT
-        DISTINCT median_ride_length,
-        member_casual,
-        day_of_week
-FROM 
-        (
-        SELECT 
-                ride_id,
-                member_casual,
-                day_of_week,
-                ride_length,
-                PERCENTILE_DISC(ride_length, 0.5 IGNORE NULLS) OVER(PARTITION BY day_of_week) AS  median_ride_length
-        FROM 
-                `cyclistic-cs-341119.biketrips.2021_Q1`
-        WHERE
-                member_casual = 'casual'
+                -- member_casual = 'casual'
         )
 ORDER BY 
         median_ride_length DESC LIMIT 7
@@ -273,10 +251,6 @@ GROUP BY
 ORDER BY 
         TotalTrips DESC LIMIT 7
 
-
- -- Member only
- -- Looking at total number of trips per day
-
 SELECT  
         day_of_week,
         COUNT(DISTINCT ride_id) AS TotalTrips
@@ -284,26 +258,11 @@ FROM
         `cyclistic-cs-341119.biketrips.2021_Q1`
 WHERE 
         member_casual = 'member'
+        -- member_casual = 'casual'
 GROUP BY 
         day_of_week
 ORDER BY 
         TotalTrips DESC LIMIT 7
-
-
- -- Casual only
- -- Looking at total number of trips per day
-
-SELECT  
-        day_of_week,
-        COUNT(DISTINCT ride_id) AS TotalTrips
-FROM
-        `cyclistic-cs-341119.biketrips.2021_Q1`
-WHERE 
-        member_casual = 'casual'
-GROUP BY 
-        day_of_week
-ORDER BY 
-        TotalTrips DESC LIMIT 7  
 
 
  -- Start stations: member vs casual
