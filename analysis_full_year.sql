@@ -301,6 +301,61 @@ LIMIT
   7
 
 
+ -- Looking at most popular bike types
+ -- Overall counts
+
+SELECT 
+        COUNTIF(rideable_type = rideable_type) AS `Rows`, 
+        rideable_type,
+        member_casual
+FROM
+        `cyclistic-cs-341119.biketrips.full_year`
+GROUP BY 
+        rideable_type, 
+        member_casual
+ORDER BY 
+        `Rows` DESC
+LIMIT 5
+
+
+ -- Looking at bike types for member and casual
+ 
+SELECT
+        member_casual,
+        rideable_type AS bike_type
+FROM
+        `cyclistic-cs-341119.biketrips.full_year`
+WHERE 
+        member_casual = 'member'
+        -- member_casual = 'casual'
+GROUP BY 
+        1,2
+
+
+ -- Looking at average ride length by bike type
+
+SELECT
+        rideable_type,
+        AVG(ride_length) AS ride_length_AVG
+FROM
+        `cyclistic-cs-341119.biketrips.full_year`
+GROUP BY 
+        1
+LIMIT 
+        3
+
+
+ -- Looking at max ride length by bike type
+
+SELECT
+        rideable_type,
+        MAX(ride_length) AS ride_length_MAX
+FROM
+        `cyclistic-cs-341119.biketrips.full_year`
+GROUP BY 
+        1
+ 
+ 
  -- Start stations: member vs casual
  -- Looking at start station counts
 
