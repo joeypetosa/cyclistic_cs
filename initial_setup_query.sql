@@ -101,6 +101,167 @@ FROM
         `cyclistic-cs-341119.biketrips.2021_02_biketrips`
 
 
+ -- Combine the count distinct results into one temporary table:
+ 
+ WITH biketrips_2021_02 AS 
+        (
+        SELECT 
+	        '2021_02_biketrips' AS period,
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_02_biketrips`
+        ), biketrips_2021_03 AS 
+        (
+        SELECT 
+                '2021_03_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_03_biketrips`
+
+        ), biketrips_2021_04 AS 
+        (
+        SELECT 
+                '2021_04_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_04_biketrips`
+
+        ), biketrips_2021_05 AS 
+        (
+        SELECT 
+                '2021_05_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_05_biketrips`
+
+        ), biketrips_2021_06 AS 
+        (
+        SELECT 
+                '2021_06_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_06_biketrips`
+
+        ), biketrips_2021_07 AS 
+        (
+        SELECT 
+                '2021_07_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_07_biketrips`
+
+        ), biketrips_2021_08 AS 
+        (
+        SELECT 
+                '2021_08_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_08_biketrips`
+
+        ), biketrips_2021_09 AS 
+        (
+        SELECT 
+                '2021_09_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_09_biketrips`
+
+        ), biketrips_2021_10 AS 
+        (
+        SELECT 
+                '2021_10_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_10_biketrips`
+
+        ), biketrips_2021_11 AS 
+        (
+        SELECT 
+                '2021_11_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_11_biketrips`
+
+        ), biketrips_2021_12 AS 
+        (
+        SELECT 
+                '2021_12_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2021_12_biketrips`
+
+        ), biketrips_2022_01 AS 
+        (
+        SELECT 
+                '2022_01_biketrips' AS period, 
+                COUNT (DISTINCT ride_id) AS ride_total
+        FROM 
+                `cyclistic-cs-341119.biketrips.2022_01_biketrips`
+
+        )
+SELECT 
+        *
+FROM 
+        biketrips_2021_02
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_03
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_04
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_05
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_06
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_07
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_08
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_09
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_10 
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_11
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2021_12
+UNION DISTINCT
+SELECT
+        *
+FROM
+        biketrips_2022_01
+ORDER BY 
+        2 DESC
+
+
  -- We'll create five quarterly tables for analysis:
  -- Table 1) 2021_Q1 -> FEB(02), MAR(03)
  -- Table 2) 2021_Q2 -> APR(04), MAY(05), JUN(06)
@@ -131,7 +292,8 @@ SELECT
         start_lng, 
 	end_lat, 
         end_lng, 
-        member_casual
+        member_casual,
+	'Q2' AS quarter
 FROM 
         `cyclistic-cs-341119.biketrips.2021_04_biketrips`
 UNION DISTINCT  
@@ -155,7 +317,8 @@ SELECT
         start_lng, 
 	end_lat, 
         end_lng, 
-        member_casual
+        member_casual,
+	'Q2' AS quarter
 FROM 
         `cyclistic-cs-341119.biketrips.2021_05_biketrips`
 UNION DISTINCT  
@@ -179,7 +342,8 @@ SELECT
         start_lng, 
 	end_lat, 
         end_lng, 
-        member_casual
+        member_casual,
+	'Q2' AS quarter
 FROM 
         `cyclistic-cs-341119.biketrips.2021_06_biketrips`
 
@@ -207,7 +371,8 @@ SELECT
         start_lng, 
 	end_lat, 
         end_lng, 
-        member_casual
+        member_casual,
+	'Q2' AS quarter
 FROM 
         `cyclistic-cs-341119.biketrips.2021_Q1`
 
