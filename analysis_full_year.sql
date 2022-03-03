@@ -456,4 +456,118 @@ GROUP BY
         end_station_name
 ORDER BY 
         `Rows` DESC
+        
+ 
+ -- Looking at total trip data 
+
+SELECT
+        TotalTrips,
+        TotalMemberTrips,
+        TotalCasualTrips,
+        ride_date,
+        quarter
+FROM 
+        (
+        SELECT
+                COUNT(ride_id) AS TotalTrips,
+                COUNTIF(member_casual = 'member') AS TotalMemberTrips,
+                COUNTIF(member_casual = 'casual') AS TotalCasualTrips,
+                ride_date,
+                quarter
+        FROM
+                `cyclistic-cs-341119.biketrips.full_year`
+        WHERE 
+                ride_date = ride_date
+        GROUP BY
+                ride_date,
+                quarter
+        )
+GROUP BY 
+        1,2,3,4,5
+ORDER BY 
+        ride_date ASC
+ 
+ 
+ -- trips per day 
+
+SELECT
+        TotalTrips,
+        member_casual,
+        ride_date,
+        quarter
+FROM 
+        (
+        SELECT
+                COUNT(ride_id) AS TotalTrips,
+                member_casual,
+                ride_date,
+                quarter
+        FROM
+                `cyclistic-cs-341119.biketrips.full_year`
+        WHERE 
+                ride_date = ride_date
+        GROUP BY
+                member_casual,
+                ride_date,
+                quarter
+        )
+GROUP BY 
+        1,2,3,4
+ORDER BY 
+        ride_date ASC
+
+ 
+ --Trips per day along with running percentage
+
+SELECT
+        ride_date,
+        TotalTrips_both,
+        TotalMemberTrips,
+        TotalCasualTrips,
+        ROUND(CAST(TotalMemberTrips/TotalTrips_both AS NUMERIC),2)*100 AS MemberPercentage,
+        ROUND(CAST(TotalCasualTrips/TotalTrips_both AS NUMERIC),2)*100 AS CasualPercentage
+FROM 
+        (
+        SELECT
+                ride_date,
+                COUNT(ride_id) AS TotalTrips_both,
+                COUNTIF(member_casual = 'member') AS TotalMemberTrips,
+                COUNTIF(member_casual = 'casual') AS TotalCasualTrips
+        FROM
+                `cyclistic-cs-341119.biketrips.full_year`
+        WHERE 
+                ride_date = ride_date
+        GROUP BY 
+                ride_date
+        )
+GROUP BY 
+        1,2,3,4
+ORDER BY 
+        ride_date
+
+
+ -- Average start hour along with running percentage
+
+SELECT
+        start_hour,
+        total_trips,
+        member_casual
+FROM 
+        (
+        SELECT
+                EXTRACT(HOUR FROM start_time) as start_hour,
+                COUNT(ride_id) AS total_trips,
+                member_casual
+        FROM
+                `cyclistic-cs-341119.biketrips.full_year`
+        WHERE 
+                ride_id = ride_id
+        GROUP BY 
+                start_hour,
+                member_casual
+        )
+GROUP BY 
+        1,2,3
+ORDER BY 
+        start_hour
 
